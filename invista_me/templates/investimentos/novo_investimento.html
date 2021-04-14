@@ -1,0 +1,35 @@
+{% extends 'investimentos/base.html' %}
+{% block conteudo %}
+{% load widget_tweaks %}   <!-- Carregando o aplicativo para personalizar o formulário -->
+
+<! doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Investimento</title>
+</head>
+<body>
+    <div class="container">  <!-- Inserir formulário dentro de uma <div>  -->
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h1>Investimento</h1>
+            <div class="form-row align-items-center">
+                <label>Investimento</label>
+                <!-- render_field: Propriedade do widget_tweaks -->
+                {% render_field formulario.investimento class="form-control" %}
+                <label>Valor</label>
+                {% render_field formulario.valor class="form-control pull-left" %}
+                <label>Pago</label>
+                {% render_field formulario.pago class="form-control form-check-input" %}
+                <label>Data</label>
+                {% render_field formulario.data class="form-control" %}
+            </div>
+            <button style="margin-top: 10px"  class="btn btn-success" type="submit">Salvar</button>
+        </form>
+    </div>  <!-- INSERIR  -->
+</body>
+</html>
+{% endblock %}
