@@ -1,24 +1,24 @@
 from django.shortcuts import render, redirect
-# TRAZER INFORMAÇÕES DO BANCO PARA A PÁGINA
+# TRAZER INFORMAï¿½ï¿½ES DO BANCO PARA A Pï¿½GINA
 from .models import Investimento
 # PARA UTILIZAR O ( forms.py )
-# from .forms import nome_formulário
+# from .forms import nome_formulï¿½rio
 from .forms import InvestimentoForm
 
 
 def investimentos(request):
-    # CRIAR DICIONÁRIO P/PASSAR AS INFORMAÇÕES DOS BANCO PARA PÁGINA
-    # Guardo a informação dentro da chave ( dados ) do Dicionário ( dados )
+    # CRIAR DICIONï¿½RIO P/PASSAR AS INFORMAï¿½ï¿½ES DOS BANCO PARA Pï¿½GINA
+    # Guardo a informaï¿½ï¿½o dentro da chave ( dados ) do Dicionï¿½rio ( dados )
     dados = {
         'dados': Investimento.objects.all()  # retorna todos os dados da tabela Investimento
     }
-    # dados: é passado como parâmetro de context
+    # dados: ï¿½ passado como parï¿½metro de context
     return render(request, 'investimentos/investimentos_ant.html', context=dados)
 
 
 # Poderia usar por exemplo: Investimento.objects.get(valor=100)
 def detalhe(request, id_investimento):
-    # COMO TEMOS QUE PASSAR UM DICIONÁRIO, TRANSFORMAR EM UM DICIONÁRIO
+    # COMO TEMOS QUE PASSAR UM DICIONï¿½RIO, TRANSFORMAR EM UM DICIONï¿½RIO
     dados = {
         'dados': Investimento.objects.get(pk=id_investimento)
     }
@@ -26,69 +26,69 @@ def detalhe(request, id_investimento):
 
 
 def criar(request):
-    # receber as informações dentro da função criar(request)
-    # Primeiro saber se estamos criando algo ou alterando a informação
+    # receber as informaï¿½ï¿½es dentro da funï¿½ï¿½o criar(request)
+    # Primeiro saber se estamos criando algo ou alterando a informaï¿½ï¿½o
     if request.method == 'POST':
-        # Não será criado do zero, Usando as informações passadas na tela
+        # Nï¿½o serï¿½ criado do zero, Usando as informaï¿½ï¿½es passadas na tela
         investimento_form = InvestimentoForm(request.POST)
 
-        if investimento_form.is_valid():  # Validar se dados estão corretamente preenchidos
+        if investimento_form.is_valid():  # Validar se dados estï¿½o corretamente preenchidos
             investimento_form.save()  # Salvar no banco
-            # Após ( Salvar ) redirecionar para a página de listam
+            # Apï¿½s ( Salvar ) redirecionar para a pï¿½gina de listam
             # Importar ( redirect ) -  from django.shortcuts import render,HttpResponse , redirect
         return redirect('investimentos')
     else:
         investimento_form = InvestimentoForm()   # Instanciar
-        # Criar dicionário para passar os dados para a página
+        # Criar dicionï¿½rio para passar os dados para a pï¿½gina
         formulario = {
             'formulario': investimento_form
         }
         return render(request, 'investimentos/novo_investimento.html', context=formulario)
 
 
-def editar(request, id_investimento):  # id_investiemnto é um nome qualquer
-    # Editar item existente no banco, econtrar um ítem ou nao com este ( id )
+def editar(request, id_investimento):  # id_investiemnto ï¿½ um nome qualquer
+    # Editar item existente no banco, econtrar um ï¿½tem ou nao com este ( id )
     investimento = Investimento.objects.get(pk=id_investimento)
-    # Verificar qual requisição está sendo feita
+    # Verificar qual requisiï¿½ï¿½o estï¿½ sendo feita
     # novo_investimemnto/1 - GET
     if request.method == 'GET':
-        # Popular formulário e entrega de volta p/tela com infomações preenchidas
+        # Popular formulï¿½rio e entrega de volta p/tela com infomaï¿½ï¿½es preenchidas
         formulario = InvestimentoForm(instance=investimento)
 
-        # Retornar para a mesma página que está sendo usada para criar novos investimentos
-        # Formulário será criado com as informações preenchidas
+        # Retornar para a mesma pï¿½gina que estï¿½ sendo usada para criar novos investimentos
+        # Formulï¿½rio serï¿½ criado com as informaï¿½ï¿½es preenchidas
         return render(request, 'investimentos/novo_investimento.html', {'formulario': formulario})
 
-    # caso requisição seja POST
-    # Verificar se formulário foi preenchido corretamente
-    # Atualizar informação sem criar uma: instance=
-    # Usando ( instance ) estou usando algo já existente
+    # caso requisiï¿½ï¿½o seja POST
+    # Verificar se formulï¿½rio foi preenchido corretamente
+    # Atualizar informaï¿½ï¿½o sem criar uma: instance=
+    # Usando ( instance ) estou usando algo jï¿½ existente
 
     else:
         formulario = InvestimentoForm(request.POST, instance=investimento)    # InvestimentoForm sendo criado
-        # Ver se o formulário está válido
+        # Ver se o formulï¿½rio estï¿½ vï¿½lido
         if formulario.is_valid():
             formulario.save()
         return redirect('investimentos')  # nome da url
 
-# Por padrão:
-# Quando acessa uma página estamos fazendo requisição ( GET )
-# Quando envia dados a partir de uma página estamos fazendo requisição ( POST )
-# Quando confirmo uma ( EXCLUSÂO ) estou enviando um ( POST )
+# Por padrï¿½o:
+# Quando acessa uma pï¿½gina estamos fazendo requisiï¿½ï¿½o ( GET )
+# Quando envia dados a partir de uma pï¿½gina estamos fazendo requisiï¿½ï¿½o ( POST )
+# Quando confirmo uma ( EXCLUSï¿½O ) estou enviando um ( POST )
 
 
 def excluir(request, id_investimento):
-    # Buscar informação no banco
+    # Buscar informaï¿½ï¿½o no banco
     # Exemplo: Poderia usar Investimento.objects.get(data=)
     investimento = Investimento.objects.get(pk=id_investimento)
     if request.method == 'POST':
         investimento.delete()
-        # Redirecionar para página de Investimento
-        return redirect('investimentos')  # ( investimentos ) é o nome da url
-    # Se não for ( POST ) está tentando carregar a pág pela 1a vez
-    # Pedir que confirme a exclusão, caso clique em ( Confirmar ) estará fazendo
-    # uma postagem, neste caso será excluída a postagem
-    #                        Passar um dicionário que contém item que receberá investimento
+        # Redirecionar para pï¿½gina de Investimento
+        return redirect('investimentos')  # ( investimentos ) ï¿½ o nome da url
+    # Se nï¿½o for ( POST ) estï¿½ tentando carregar a pï¿½g pela 1a vez
+    # Pedir que confirme a exclusï¿½o, caso clique em ( Confirmar ) estarï¿½ fazendo
+    # uma postagem, neste caso serï¿½ excluï¿½da a postagem
+    #                        Passar um dicionï¿½rio que contï¿½m item que receberï¿½ investimento
     return render(request, 'investimentos/confirmar_exclusao.html', {'item': investimento})
 
 
